@@ -21,7 +21,8 @@ browser.visit(URI.join hostname, "/login.event")
 browser.fill_in("form-login-username", with: username)
 browser.fill_in("form-login-password", with: password)
 browser.click_button("submit")
+sleep 5
 
-puts URI.join hostname, "/transactionDownload.event"
 browser.visit(URI.join hostname, "/transactionDownload.event")
+sleep 5
 puts browser.page.source
