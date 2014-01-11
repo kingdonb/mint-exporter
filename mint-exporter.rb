@@ -1,5 +1,4 @@
 require "uri"
-require "rubygems"
 require "bundler/setup"
 Bundler.require
 
@@ -13,14 +12,16 @@ end
 username = ARGV[0]
 password = ARGV[1]
 
-agent = Mechanize.new
-agent.pluggable_parser.default = Mechanize::Download
+browser = Capybara
+Capybara.javascript_driver = :webkit
+Capybara.current_driver = :webkit
 
-page  = agent.get(URI.join hostname, "/login.event")
-form = page.form_with(:id => "form-login")
+browser.visit(URI.join hostname, "/login.event")
 
-form.username = username
-form.password = password
-form.submit
+browser.fill_in("form-login-username", with: username)
+browser.fill_in("form-login-password", with: password)
+browser.click_button("submit")
 
-puts agent.get(URI.join hostname, "/transactionDownload.event").body
+puts URI.join hostname, "/transactionDownload.event"
+browser.visit(URI.join hostname, "/transactionDownload.event")
+puts browser.page.source
